@@ -1,10 +1,12 @@
 class minecraft {
-  file {'/opt/minecraft':
+  $url = 'https://launcher.mojang.com/v1/objects/e00c4052dac1d59a1188b2aa9d5a87113aaf1122/server.jar'
+  $install_dir = '/opt/minecraft'
+  file {$install_dir:
     ensure => directory,
   }
-  file {'/opt/minecraft/server.jar':
+  file {"${install_dir}/server.jar":
     ensure => file,
-    source => 'https://launcher.mojang.com/v1/objects/e00c4052dac1d59a1188b2aa9d5a87113aaf1122/server.jar',
+    source => $url,
     before => Service['minecraft'],
   }
   file {'/tmp/jdk-18_linux-x64_bin.rpm':
@@ -20,7 +22,7 @@ class minecraft {
   #package {'java':
   #  ensure => present,
   #}
-  file {'/opt/minecraft/eula.txt':
+  file {"${install_dir}/eula.txt":
     ensure => file,
     content => 'eula=true',
   }
@@ -32,6 +34,6 @@ class minecraft {
     ensure => running,
     enable => true,
     #require => [Package['java'],File['/opt/minecraft/eula.txt'],File['/etc/systemd/system/minecraft.service']],
-    require => [Package['jdk-18_linux-x64_bin'],File['/opt/minecraft/eula.txt'],File['/etc/systemd/system/minecraft.service']],
+    require => [Package['jdk-18_linux-x64_bin'],File["${install_dir}/eula.txt"],File['/etc/systemd/system/minecraft.service']],
   }
 }
