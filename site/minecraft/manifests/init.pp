@@ -17,9 +17,9 @@ class minecraft {
     source => "/tmp/jdk-18_linux-x64_bin.rpm",
     require => File["/tmp/jdk-18_linux-x64_bin.rpm"],
   }
-  package {'java':
-    ensure => present,
-  }
+  #package {'java':
+  #  ensure => present,
+  #}
   file {'/opt/minecraft/eula.txt':
     ensure => file,
     content => 'eula=true',
